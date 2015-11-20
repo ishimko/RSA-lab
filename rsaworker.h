@@ -9,7 +9,9 @@ public:
 	RSAWorker();
 
 private:
-	word fastModuloExpansion(word number, word degree, word modulo);
+	word fastModularExponentiation(word number, word power, word modulo);
+	word euclidExtended(unsigned short a, int b, int *x, int *y);
+	word getMultiplicativeInverse(word number, word modulo);
 };
 
 #endif // RSAWORKER_H
