@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    rsaworker.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    rsaworker.h
 
 FORMS    += mainwindow.ui

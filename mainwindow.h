@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFileDialog>
 
 namespace Ui {
 class MainWindow;
@@ -21,6 +22,10 @@ private slots:
 	void on_rbtnDecipher_clicked();
 
 	void on_rbtnBreak_clicked();
+
+	void on_btnChooseInputFile_clicked();
+
+	void on_btnChooseOutputFile_clicked();
 
 private:
 	Ui::MainWindow *ui;
