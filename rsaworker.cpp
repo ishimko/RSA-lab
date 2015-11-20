@@ -1,8 +1,9 @@
 #include "rsaworker.h"
 
-RSAWorker::RSAWorker(QObject *parent)
+RSAWorker::RSAWorker(QObject *parent):
+	QObject(parent),
+	isRunning(false)
 {
-	return;
 }
 
 word RSAWorker::fastModularExponentiation(word number, word power, word modulo)
