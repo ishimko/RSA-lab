@@ -17,6 +17,7 @@ SOURCES += main.cpp\
     rsaworker.cpp
 
 HEADERS  += mainwindow.h \
-    rsaworker.h
+    rsaworker.h \
+    types.h
 
 FORMS    += mainwindow.ui
