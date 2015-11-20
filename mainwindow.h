@@ -15,8 +15,20 @@ public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
 
+private slots:
+	void on_rbtnCipher_clicked();
+
+	void on_rbtnDecipher_clicked();
+
+	void on_rbtnBreak_clicked();
+
 private:
 	Ui::MainWindow *ui;
+
+	void enableCipherMode(bool enabled);
+	void enableDecipherMode(bool enabled);
+	void enableBreakMode(bool enabled);
+
 };
 
 #endif // MAINWINDOW_H

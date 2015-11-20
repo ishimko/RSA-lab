@@ -6,9 +6,55 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
+
+	enableCipherMode(true);
 }
 
 MainWindow::~MainWindow()
 {
 	delete ui;
+}
+
+void MainWindow::enableCipherMode(bool enabled)
+{
+	ui->grpCipher->setEnabled(enabled);
+
+	if (enabled){
+		enableDecipherMode(false);
+		enableBreakMode(false);
+	}
+}
+
+void MainWindow::enableDecipherMode(bool enabled)
+{
+	ui->grpDecipher->setEnabled(enabled);
+
+	if (enabled){
+		enableBreakMode(false);
+		enableCipherMode(false);
+	}
+}
+
+void MainWindow::enableBreakMode(bool enabled)
+{
+	ui->grpBreak->setEnabled(enabled);
+	if (enabled){
+		enableDecipherMode(false);
+		enableCipherMode(false);
+	}
+}
+
+void MainWindow::on_rbtnCipher_clicked()
+{
+	enableCipherMode(true);
+}
+
+void MainWindow::on_rbtnDecipher_clicked()
+{
+	enableDecipherMode(true);
+}
+
+void MainWindow::on_rbtnBreak_clicked()
+{
+	enableBreakMode(true);
 }
