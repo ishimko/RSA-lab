@@ -54,6 +54,7 @@ private:
 	QString getOutputFileName();
 	void displayError(ErrorType errorType);
 	void cipherMode();
+	QString fileAsBytes(QString fileName);
 };
 
 #endif // MAINWINDOW_H

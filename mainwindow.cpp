@@ -90,6 +90,20 @@ QString MainWindow::fileAsWords(QString fileName){
 	return result;
 }
 
+QString MainWindow::fileAsBytes(QString fileName){
+	QFile f(fileName);
+	f.open(QIODevice::ReadOnly);
+	QString result;
+	char block;
+	for (qint64 i = 0; i < f.size(); i++){
+		f.read(&block, 1);
+		result.append(QString::number((byte)block) + " ");
+	}
+	f.close();
+
+	return result;
+}
+
 void MainWindow::displayError(ErrorType errorType){
 	switch(errorType){
 		case E_TOO_BIG_KEY:
@@ -127,18 +141,26 @@ void MainWindow::cipherMode(){
 
 	word eulerValue = (q - 1)*(p - 1);
 
-	if (gcd(eulerValue, secretKey)){
+	if (gcd(eulerValue, secretKey) != 1){
 		displayError(E_INVALID_KEY);
 	}
 
-	if (!isPrimeP){
+	if (!isPrime(p)){
 		displayError(E_NOT_PRIME_P);
 		return;
 	}
-	if (!isPrimeQ){
+	if (!isPrime(q)){
 		displayError(E_NOT_PRIME_Q);
 		return;
 	}
+
+	ui->txtLog->clear();
+	QString inputFileName = getInputFileName();
+	QFile f(inputFileName);
+	ui->txtLog->appendPlainText("Размер входного файла: " + QString::number(f.size()) + " байт");
+	ui->txtLog->appendPlainText("Входной файл: ");
+
+	ui->txtLog->appendPlainText(fileAsBytes(getInputFileName()));
 
 	word openKey = getMultiplicativeInverse(secretKey, eulerValue);
 
@@ -179,6 +201,7 @@ void MainWindow::cipheringDone()
 {
 	RSACipher *rsaCipher = static_cast<RSACipher *>(sender());
 	delete rsaCipher;
+	ui->txtLog->appendPlainText("\nВыходной файл: ");
 	ui->txtLog->appendPlainText(fileAsWords(getOutputFileName()));
 	MainWindow::setEnabled(true);
 	QMessageBox::information(this, "Информация", "Процесс завершен!");
