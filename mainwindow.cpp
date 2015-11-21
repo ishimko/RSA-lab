@@ -61,16 +61,41 @@ void MainWindow::on_rbtnBreak_clicked()
 
 void MainWindow::on_btnChooseInputFile_clicked()
 {
-	QString inputFilename = QFileDialog::getOpenFileName(this, "Открыть файл", 0, "Все файлы (*)");
-	if (!inputFilename.isNull()){
-		ui->edtInputFile->setText(inputFilename);
+	QString inputFileName = QFileDialog::getOpenFileName(this, "Открыть файл", 0, "Все файлы (*)");
+	if (!inputFileName.isNull()){
+		ui->edtInputFile->setText(inputFileName);
 	}
 }
 
 void MainWindow::on_btnChooseOutputFile_clicked()
 {
-	QString outputFilename = QFileDialog::getSaveFileName(this, "Сохранить файл", 0, "Все файлы (*)");
-	if (!outputFilename.isNull()){
-		ui->edtOutputFile->setText(outputFilename);
+	QString outputFileName = QFileDialog::getSaveFileName(this, "Сохранить файл", 0, "Все файлы (*)");
+	if (!outputFileName.isNull()){
+		ui->edtOutputFile->setText(outputFileName);
 	}
+}
+
+void MainWindow::on_btnProcess_clicked()
+{
+	byte q = ui->edtQ->text().toInt();
+	byte p = ui->edtP->text().toInt();
+	word secretKey = ui->edtSecretKeyCipher->text().toInt();
+
+	RSACipher *rsaCipher = new RSACipher(ui->edtInputFile->text(), ui->edtOutputFile->text(), q, p, secretKey);
+	QThread *cipheringThread = new QThread();
+	connect(this, SIGNAL(destroyed()), rsaCipher, SLOT(deleteLater()));
+	connect(rsaCipher, SIGNAL(destroyed()), cipheringThread, SLOT(quit()));
+	connect(cipheringThread, SIGNAL(finished()), cipheringThread, SLOT(deleteLater()));
+	rsaCipher->moveToThread(cipheringThread);
+	connect(this, SIGNAL(doWork()), rsaCipher, SLOT(cipher()));
+	connect(rsaCipher, SIGNAL(done()), this, SLOT(processDone()));
+	connect(rsaCipher, SIGNAL(progress(int)), ui->progressBar, SLOT(setValue(int)));
+	cipheringThread->start();
+	emit doWork();
+}
+
+void MainWindow::processDone()
+{
+	QMessageBox::information(this, "Информация", "Процесс завершен!");
+
 }

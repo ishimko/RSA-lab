@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>667</width>
-    <height>442</height>
+    <height>436</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,10 +15,27 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="10" column="0">
-     <widget class="QPushButton" name="btnProcess">
+    <item row="2" column="0">
+     <widget class="QRadioButton" name="rbtnCipher">
       <property name="text">
-       <string>Обработать</string>
+       <string>Шифрование</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QRadioButton" name="rbtnDecipher">
+      <property name="text">
+       <string>Расшифровка</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="1" colspan="2">
+     <widget class="QProgressBar" name="progressBar">
+      <property name="value">
+       <number>24</number>
       </property>
      </widget>
     </item>
@@ -35,124 +52,18 @@
       </property>
      </spacer>
     </item>
-    <item row="10" column="1" colspan="2">
-     <widget class="QProgressBar" name="progressBar">
-      <property name="value">
-       <number>24</number>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QRadioButton" name="rbtnDecipher">
+    <item row="10" column="0">
+     <widget class="QPushButton" name="btnProcess">
       <property name="text">
-       <string>Расшифровка</string>
+       <string>Обработать</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QRadioButton" name="rbtnCipher">
+    <item row="6" column="0">
+     <widget class="QRadioButton" name="rbtnBreak">
       <property name="text">
-       <string>Шифрование</string>
+       <string>Взлом</string>
       </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0" colspan="2">
-     <widget class="QGroupBox" name="grpCipher">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="title">
-       <string/>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_10">
-       <item row="3" column="1">
-        <widget class="QLineEdit" name="edtSecretKeyCipher"/>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="edtQ"/>
-       </item>
-       <item row="1" column="0" alignment="Qt::AlignRight">
-        <widget class="QLabel" name="lblP">
-         <property name="text">
-          <string>p</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" alignment="Qt::AlignRight">
-        <widget class="QLabel" name="lblQ">
-         <property name="text">
-          <string>q</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="edtP"/>
-       </item>
-       <item row="3" column="0" alignment="Qt::AlignRight">
-        <widget class="QLabel" name="lblSecretKeyCipher">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;K&lt;span style=&quot; vertical-align:sub;&quot;&gt;c&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::RichText</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="5" column="0" colspan="2">
-     <widget class="QGroupBox" name="grpDecipher">
-      <property name="title">
-       <string/>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_9">
-       <item row="2" column="0" alignment="Qt::AlignRight">
-        <widget class="QLabel" name="lblSecretKeyDecipher">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;K&lt;span style=&quot; vertical-align:sub;&quot;&gt;c&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::RichText</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" alignment="Qt::AlignRight">
-        <widget class="QLabel" name="lblRDecipher">
-         <property name="text">
-          <string>r</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="edtRDecipher"/>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="edtSecretKeyDecipher"/>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="0" column="2" rowspan="10">
-     <widget class="QGroupBox" name="grpLog">
-      <property name="title">
-       <string>Лог</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_11">
-       <item row="0" column="1">
-        <widget class="QPlainTextEdit" name="txtLog">
-         <property name="minimumSize">
-          <size>
-           <width>286</width>
-           <height>0</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-      </layout>
      </widget>
     </item>
     <item row="1" column="0" colspan="2">
@@ -205,6 +116,102 @@
       </layout>
      </widget>
     </item>
+    <item row="3" column="0" colspan="2">
+     <widget class="QGroupBox" name="grpCipher">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_10">
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="edtSecretKeyCipher"/>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="edtQ"/>
+       </item>
+       <item row="1" column="0" alignment="Qt::AlignRight">
+        <widget class="QLabel" name="lblP">
+         <property name="text">
+          <string>p</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" alignment="Qt::AlignRight">
+        <widget class="QLabel" name="lblQ">
+         <property name="text">
+          <string>q</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="edtP"/>
+       </item>
+       <item row="3" column="0" alignment="Qt::AlignRight">
+        <widget class="QLabel" name="lblSecretKeyCipher">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;K&lt;span style=&quot; vertical-align:sub;&quot;&gt;c&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::RichText</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="2" rowspan="10">
+     <widget class="QGroupBox" name="grpLog">
+      <property name="title">
+       <string>Лог</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_11">
+       <item row="0" column="1">
+        <widget class="QPlainTextEdit" name="txtLog">
+         <property name="minimumSize">
+          <size>
+           <width>286</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="5" column="0" colspan="2">
+     <widget class="QGroupBox" name="grpDecipher">
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_9">
+       <item row="2" column="0" alignment="Qt::AlignRight">
+        <widget class="QLabel" name="lblSecretKeyDecipher">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;K&lt;span style=&quot; vertical-align:sub;&quot;&gt;c&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::RichText</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" alignment="Qt::AlignRight">
+        <widget class="QLabel" name="lblRDecipher">
+         <property name="text">
+          <string>r</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="edtRDecipher"/>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="edtSecretKeyDecipher"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
     <item row="7" column="0" rowspan="2" colspan="2">
      <widget class="QGroupBox" name="grpBreak">
       <property name="title">
@@ -235,13 +242,6 @@
         <widget class="QLineEdit" name="edtRBreak"/>
        </item>
       </layout>
-     </widget>
-    </item>
-    <item row="6" column="0">
-     <widget class="QRadioButton" name="rbtnBreak">
-      <property name="text">
-       <string>Взлом</string>
-      </property>
      </widget>
     </item>
    </layout>

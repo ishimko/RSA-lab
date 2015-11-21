@@ -3,6 +3,7 @@
 
 typedef unsigned short word;
 typedef unsigned long uint32;
+typedef unsigned char byte;
 
 #endif // TYPES_H
 

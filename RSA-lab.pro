@@ -14,10 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    rsaworker.cpp
+    rsaroutines.cpp \
+    rsacipher.cpp
 
 HEADERS  += mainwindow.h \
-    rsaworker.h \
-    types.h
+    types.h \
+    rsaroutines.h \
+    rsacipher.h
 
 FORMS    += mainwindow.ui
