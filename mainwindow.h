@@ -53,6 +53,7 @@ private:
 	QString getInputFileName();
 	QString getOutputFileName();
 	void displayError(ErrorType errorType);
+	void cipherMode();
 };
 
 #endif // MAINWINDOW_H

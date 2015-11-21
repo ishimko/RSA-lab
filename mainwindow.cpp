@@ -104,9 +104,6 @@ void MainWindow::displayError(ErrorType errorType){
 		case E_NOT_PRIME_Q:
 			QMessageBox::critical(this, "Ошибка", "q не является простым числом!");
 			break;
-		case E_NOT_PRIME:
-			QMessageBox::critical(this, "Ошибка", "q и p не являются простыми числами!");
-			break;
 		case E_INVALID_KEY:
 			QMessageBox::critical(this, "Ошибка", "Ключ должен быть взаимно простым со значением функции Эйлера от r!");
 			break;
@@ -117,9 +114,8 @@ void MainWindow::displayError(ErrorType errorType){
 
 }
 
-void MainWindow::on_btnProcess_clicked()
-{
-	word q= ui->edtQ->text().toUInt();
+void MainWindow::cipherMode(){
+	word q = ui->edtQ->text().toUInt();
 	word p = ui->edtP->text().toUInt();
 	uint32 r = q * p;
 	word secretKey = ui->edtSecretKeyCipher->text().toUInt();
@@ -135,20 +131,13 @@ void MainWindow::on_btnProcess_clicked()
 		displayError(E_INVALID_KEY);
 	}
 
-	bool isPrimeP = isPrime(p);
-	bool isPrimeQ = isPrime(q);
-	if (!isPrimeQ && !isPrimeP){
-		displayError(E_NOT_PRIME);
+	if (!isPrimeP){
+		displayError(E_NOT_PRIME_P);
 		return;
-	} else {
-		if (!isPrimeP){
-			displayError(E_NOT_PRIME_P);
-			return;
-		}
-		if (!isPrimeQ){
-			displayError(E_NOT_PRIME_Q);
-			return;
-		}
+	}
+	if (!isPrimeQ){
+		displayError(E_NOT_PRIME_Q);
+		return;
 	}
 
 	word openKey = getMultiplicativeInverse(secretKey, eulerValue);
@@ -168,6 +157,14 @@ void MainWindow::on_btnProcess_clicked()
 
 	cipheringThread->start();
 	emit doWork();
+}
+
+void MainWindow::on_btnProcess_clicked()
+{
+	if (ui->rbtnCipher->isChecked()){
+		cipherMode();
+		return;
+	}
 }
 
 QString MainWindow::getInputFileName(){
