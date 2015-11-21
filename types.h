@@ -13,12 +13,14 @@ typedef enum{
 	E_TOO_BIG_P_Q,
 	E_INVALID_KEY,
 	E_TOO_BIG_KEY,
-	E_TOO_SMALL_P_Q
+	E_TOO_SMALL_P_Q,
+	E_INVALID_INPUT_FILE,
+	E_INVALID_OUTPUT_FILE
 } ErrorType;
 
 typedef enum{
 	MODE_CIPHER,
-	MODE_DECIPHER
+	MODE_DECIPHER,
 } WorkerMode;
 
 typedef void (*ResultWriter)(word, QFile*);

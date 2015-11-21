@@ -52,14 +52,20 @@ private:
 	void enableBreakMode(bool enabled);
 
 	QString fileAsWords(QString fileName);
+	QString fileAsBytes(QString fileName);
+
 	QString getInputFileName();
 	QString getOutputFileName();
+
 	void displayError(ErrorType errorType);
-	void cipherMode();
-	QString fileAsBytes(QString fileName);
+
 	void setInputValidators();
-	void decipherMode();
-	void breakMode();
+
+	void cipherMode(QString inputFileName, QString outputFileName);
+	void decipherMode(QString inputFileName, QString outputFileName);
+	void breakMode(QString inputFileName, QString outputFileName);
+
+	QThread *getRSAWorkerThread(RSAWorker *worker, WorkerMode workerMode);
 };
 
 #endif // MAINWINDOW_H
