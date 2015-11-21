@@ -96,8 +96,11 @@ void MainWindow::on_btnProcess_clicked()
 	byte p = ui->edtP->text().toInt();
 	word secretKey = ui->edtSecretKeyCipher->text().toInt();
 
+	MainWindow::setEnabled(false);
+
 	RSACipher *rsaCipher = new RSACipher(ui->edtInputFile->text(), ui->edtOutputFile->text(), q, p, secretKey);
 	QThread *cipheringThread = new QThread();
+
 	connect(this, SIGNAL(destroyed()), rsaCipher, SLOT(deleteLater()));
 	connect(rsaCipher, SIGNAL(destroyed()), cipheringThread, SLOT(quit()));
 	connect(cipheringThread, SIGNAL(finished()), cipheringThread, SLOT(deleteLater()));
@@ -105,6 +108,7 @@ void MainWindow::on_btnProcess_clicked()
 	connect(this, SIGNAL(doWork()), rsaCipher, SLOT(cipher()));
 	connect(rsaCipher, SIGNAL(done()), this, SLOT(cipheringDone()));
 	connect(rsaCipher, SIGNAL(progress(int)), ui->progressBar, SLOT(setValue(int)));
+
 	cipheringThread->start();
 	emit doWork();
 }
@@ -122,6 +126,8 @@ void MainWindow::cipheringDone()
 	RSACipher *rsaCipher = static_cast<RSACipher *>(sender());
 	delete rsaCipher;
 	ui->txtLog->appendPlainText(fileAsWords(getOutputFileName()));
+	MainWindow::setEnabled(true);
 	QMessageBox::information(this, "Информация", "Процесс завершен!");
+	ui->progressBar->setValue(0);
 
 }

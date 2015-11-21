@@ -37,3 +37,27 @@ word euclidExtended(unsigned short a, int b, int *x, int *y){
 	*y = x1;
 	return d;
 }
+
+bool isPrime(int number)
+{
+	bool result = true;
+
+	if (number == 2)
+		return true;
+	if (number == 1)
+		return false;
+
+	for (int i = 3; i <= (int)sqrt(number) && result; i += 2){
+		result = (number % 2);
+	}
+
+	return result;
+}
+
+word gcd(word a, word b)
+{
+	if (!a)
+		return b;
+
+	return gcd(b % a, a);
+}
