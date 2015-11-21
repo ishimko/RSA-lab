@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QThread>
 #include <QMessageBox>
+#include <QFile>
 
 #include "types.h"
 #include "rsacipher.h"
@@ -34,7 +35,7 @@ private slots:
 
 	void on_btnProcess_clicked();
 
-	void processDone();
+	void cipheringDone();
 
 signals:
 	void doWork();
@@ -48,6 +49,9 @@ private:
 	void enableDecipherMode(bool enabled);
 	void enableBreakMode(bool enabled);
 
+	QString fileAsWords(QString fileName);
+	QString getInputFileName();
+	QString getOutputFileName();
 };
 
 #endif // MAINWINDOW_H

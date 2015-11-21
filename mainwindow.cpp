@@ -75,6 +75,21 @@ void MainWindow::on_btnChooseOutputFile_clicked()
 	}
 }
 
+QString MainWindow::fileAsWords(QString fileName){
+	QFile f(fileName);
+	f.open(QIODevice::ReadOnly);
+	QString result;
+	char block[2];
+	for (qint64 i = 0; i < f.size(); i += 2){
+		f.read(block + 1, 1);
+		f.read(block, 1);
+		result.append(QString::number(*(word *)(block)) + " ");
+	}
+	f.close();
+
+	return result;
+}
+
 void MainWindow::on_btnProcess_clicked()
 {
 	byte q = ui->edtQ->text().toInt();
@@ -88,14 +103,25 @@ void MainWindow::on_btnProcess_clicked()
 	connect(cipheringThread, SIGNAL(finished()), cipheringThread, SLOT(deleteLater()));
 	rsaCipher->moveToThread(cipheringThread);
 	connect(this, SIGNAL(doWork()), rsaCipher, SLOT(cipher()));
-	connect(rsaCipher, SIGNAL(done()), this, SLOT(processDone()));
+	connect(rsaCipher, SIGNAL(done()), this, SLOT(cipheringDone()));
 	connect(rsaCipher, SIGNAL(progress(int)), ui->progressBar, SLOT(setValue(int)));
 	cipheringThread->start();
 	emit doWork();
 }
 
-void MainWindow::processDone()
+QString MainWindow::getInputFileName(){
+	return ui->edtInputFile->text();
+}
+
+QString MainWindow::getOutputFileName(){
+	return ui->edtOutputFile->text();
+}
+
+void MainWindow::cipheringDone()
 {
+	RSACipher *rsaCipher = static_cast<RSACipher *>(sender());
+	delete rsaCipher;
+	ui->txtLog->appendPlainText(fileAsWords(getOutputFileName()));
 	QMessageBox::information(this, "Информация", "Процесс завершен!");
 
 }
