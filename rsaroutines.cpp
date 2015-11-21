@@ -46,6 +46,8 @@ bool isPrime(int number)
 		return true;
 	if (number == 1)
 		return false;
+	if (!(number % 2))
+		return false;
 
 	for (int i = 3; i <= (int)sqrt(number) && result; i += 2){
 		result = (number % 2);
@@ -90,4 +92,15 @@ word readPlaintextByte(QFile *inputFile)
 	char result;
 	inputFile->read(&result, 1);
 	return result & 255;
+}
+
+word getFirstDivider(word number)
+{
+	if (!(number % 2))
+		return 2;
+	for (int i = 3; i < number / 2; i += 2){
+		if (!(number % i))
+			return i;
+	}
+	return 1;
 }

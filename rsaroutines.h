@@ -12,6 +12,8 @@ word getMultiplicativeInverse(word number, word modulo);
 bool isPrime(int number);
 word gcd(word a, word b);
 
+word getFirstDivider(word number);
+
 void writeDecipheredByte(word out, QFile *outputFile);
 void writeCipheredWord(word out, QFile *outputFile);
 

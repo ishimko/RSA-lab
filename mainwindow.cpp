@@ -150,6 +150,43 @@ void MainWindow::decipherMode(){
 	ui->txtLog->clear();
 
 	QFile f(inputFileName);
+	ui->txtLog->appendPlainText("Размер входного файла: " + QString::number(f.size()) + " байт");
+
+	ui->txtLog->appendPlainText("\nВходной файл: ");
+
+	ui->txtLog->appendPlainText(fileAsWords(inputFileName));
+
+	MainWindow::setEnabled(false);
+
+	RSAWorker *rsaDecipher = new RSAWorker(inputFileName, outputFileName, secretKey, r, MODE_DECIPHER);
+	QThread *cipheringThread = new QThread();
+
+	connect(this, SIGNAL(destroyed()), rsaDecipher, SLOT(deleteLater()));
+	connect(rsaDecipher, SIGNAL(destroyed()), cipheringThread, SLOT(quit()));
+	connect(cipheringThread, SIGNAL(finished()), cipheringThread, SLOT(deleteLater()));
+	rsaDecipher->moveToThread(cipheringThread);
+	connect(this, SIGNAL(doWork()), rsaDecipher, SLOT(startWork()));
+	connect(rsaDecipher, SIGNAL(done()), this, SLOT(decipheringDone()));
+	connect(rsaDecipher, SIGNAL(progress(int)), ui->progressBar, SLOT(setValue(int)));
+
+	cipheringThread->start();
+	emit doWork();
+}
+
+void MainWindow::breakMode(){
+	word openKey = ui->edtOpenKey->text().toUInt();
+	word r = ui->edtRBreak->text().toUInt();
+	word q = getFirstDivider(r);
+	word p = r / q;
+	word eulerValue = (p - 1)*(q - 1);
+	word secretKey = getMultiplicativeInverse(openKey, eulerValue);
+
+	QString inputFileName = getInputFileName(), outputFileName = getOutputFileName();
+
+	ui->txtLog->clear();
+	ui->txtLog->appendPlainText("p = " + QString::number(p) + ", q = " + QString::number(q));
+	ui->txtLog->appendPlainText("\nСекретный ключ: (" + QString::number(secretKey) + ", " + QString::number(r) + ")");
+	QFile f(inputFileName);
 	ui->txtLog->appendPlainText("\nРазмер входного файла: " + QString::number(f.size()) + " байт");
 
 	ui->txtLog->appendPlainText("\nВходной файл: ");
@@ -158,24 +195,22 @@ void MainWindow::decipherMode(){
 
 	MainWindow::setEnabled(false);
 
-	RSAWorker *rsaCipher = new RSAWorker(inputFileName, outputFileName, secretKey, r, MODE_DECIPHER);
+	RSAWorker *rsaDecipher = new RSAWorker(inputFileName, outputFileName, secretKey, r, MODE_DECIPHER);
 	QThread *cipheringThread = new QThread();
 
-	connect(this, SIGNAL(destroyed()), rsaCipher, SLOT(deleteLater()));
-	connect(rsaCipher, SIGNAL(destroyed()), cipheringThread, SLOT(quit()));
+	connect(this, SIGNAL(destroyed()), rsaDecipher, SLOT(deleteLater()));
+	connect(rsaDecipher, SIGNAL(destroyed()), cipheringThread, SLOT(quit()));
 	connect(cipheringThread, SIGNAL(finished()), cipheringThread, SLOT(deleteLater()));
-	rsaCipher->moveToThread(cipheringThread);
-	connect(this, SIGNAL(doWork()), rsaCipher, SLOT(startWork()));
-	connect(rsaCipher, SIGNAL(done()), this, SLOT(decipheringDone()));
-	connect(rsaCipher, SIGNAL(progress(int)), ui->progressBar, SLOT(setValue(int)));
+	rsaDecipher->moveToThread(cipheringThread);
+	connect(this, SIGNAL(doWork()), rsaDecipher, SLOT(startWork()));
+	connect(rsaDecipher, SIGNAL(done()), this, SLOT(decipheringDone()));
+	connect(rsaDecipher, SIGNAL(progress(int)), ui->progressBar, SLOT(setValue(int)));
 
 	cipheringThread->start();
 	emit doWork();
-
-
 }
 
-void MainWindow::breakMode(){
+QThread *MainWindow::getRSAWorkerThread(RSAWorker *worker){
 
 }
 
@@ -219,7 +254,7 @@ void MainWindow::cipherMode(){
 
 	ui->txtLog->clear();
 
-	ui->txtLog->appendPlainText("Открытый ключ: " + QString::number(openKey));
+	ui->txtLog->appendPlainText("Открытый ключ: (" + QString::number(openKey) + ", " + QString::number(r) + ")");
 
 	QFile f(inputFileName);
 	ui->txtLog->appendPlainText("\nРазмер входного файла: " + QString::number(f.size()) + " байт");
