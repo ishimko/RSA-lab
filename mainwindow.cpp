@@ -90,15 +90,72 @@ QString MainWindow::fileAsWords(QString fileName){
 	return result;
 }
 
+void MainWindow::displayError(ErrorType errorType){
+	switch(errorType){
+		case E_TOO_BIG_KEY:
+			QMessageBox::critical(this, "Ошибка", "Значение ключа не является двухбайтовым!");
+			break;
+		case E_TOO_BIG_P_Q:
+			QMessageBox::critical(this, "Ошибка", "Произведение p и q не является двухбайтовым!");
+			break;
+		case E_NOT_PRIME_P:
+			QMessageBox::critical(this, "Ошибка", "p не является простым числом!");
+			break;
+		case E_NOT_PRIME_Q:
+			QMessageBox::critical(this, "Ошибка", "q не является простым числом!");
+			break;
+		case E_NOT_PRIME:
+			QMessageBox::critical(this, "Ошибка", "q и p не являются простыми числами!");
+			break;
+		case E_INVALID_KEY:
+			QMessageBox::critical(this, "Ошибка", "Ключ должен быть взаимно простым со значением функции Эйлера от r!");
+			break;
+		default:
+			QMessageBox::critical(this, "Ошибка", "Неизвестная ошибка!");
+			break;
+	}
+
+}
+
 void MainWindow::on_btnProcess_clicked()
 {
-	byte q = ui->edtQ->text().toInt();
-	byte p = ui->edtP->text().toInt();
-	word secretKey = ui->edtSecretKeyCipher->text().toInt();
+	word q= ui->edtQ->text().toUInt();
+	word p = ui->edtP->text().toUInt();
+	uint32 r = q * p;
+	word secretKey = ui->edtSecretKeyCipher->text().toUInt();
+
+	if (r > 65535){
+		displayError(E_TOO_BIG_P_Q);
+		return;
+	}
+
+	word eulerValue = (q - 1)*(p - 1);
+
+	if (gcd(eulerValue, secretKey)){
+		displayError(E_INVALID_KEY);
+	}
+
+	bool isPrimeP = isPrime(p);
+	bool isPrimeQ = isPrime(q);
+	if (!isPrimeQ && !isPrimeP){
+		displayError(E_NOT_PRIME);
+		return;
+	} else {
+		if (!isPrimeP){
+			displayError(E_NOT_PRIME_P);
+			return;
+		}
+		if (!isPrimeQ){
+			displayError(E_NOT_PRIME_Q);
+			return;
+		}
+	}
+
+	word openKey = getMultiplicativeInverse(secretKey, eulerValue);
 
 	MainWindow::setEnabled(false);
 
-	RSACipher *rsaCipher = new RSACipher(ui->edtInputFile->text(), ui->edtOutputFile->text(), q, p, secretKey);
+	RSACipher *rsaCipher = new RSACipher(getInputFileName(), getOutputFileName(), openKey, r);
 	QThread *cipheringThread = new QThread();
 
 	connect(this, SIGNAL(destroyed()), rsaCipher, SLOT(deleteLater()));

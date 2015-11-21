@@ -23,7 +23,7 @@ word getMultiplicativeInverse(word number, word modulo)
 	return (x % modulo + modulo) % modulo;
 }
 
-word euclidExtended(unsigned short a, int b, int *x, int *y){
+word euclidExtended(word a, int b, int *x, int *y){
 	int x1, y1;
 	unsigned short d;
 	if (a == 0){

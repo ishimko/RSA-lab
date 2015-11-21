@@ -1,10 +1,9 @@
 #include "rsacipher.h"
 
-RSACipher::RSACipher(QString inputFileName, QString outputFileName, int q, int p, int secretKey, QObject *parent):
+RSACipher::RSACipher(QString inputFileName, QString outputFileName, word key, word r, QObject *parent):
 	QObject(parent),
-	q(q),
-	p(p),
-	secretKey(secretKey),
+	key(key),
+	r(r),
 	inputFileName(inputFileName),
 	outputFileName(outputFileName)
 {
@@ -17,16 +16,13 @@ void RSACipher::cipher()
 	inputFile.open(QIODevice::ReadOnly);
 	outputFile.open(QIODevice::WriteOnly);
 
-	word eulerValue = (q - 1)*(p - 1);
-	word r = p*q;
-	word openKey = getMultiplicativeInverse(secretKey, eulerValue);
 	quint64 fileSize = inputFile.size();
 
 	char in, firstByte, secondByte;
 	word out;
 	for (quint64 i = 0; i < fileSize; i++){
 		inputFile.read(&in, 1);
-		out = fastModularExponentiation(in, openKey, r);
+		out = fastModularExponentiation(in, key, r);
 		firstByte = out & 255;
 		secondByte = out >> 8;
 		outputFile.write(&secondByte, 1);

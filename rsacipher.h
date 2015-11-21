@@ -13,11 +13,10 @@ class RSACipher : public QObject
 {
 	Q_OBJECT
 public:
-	explicit RSACipher(QString inputFileName, QString outputFileName, int q, int p, int secretKey, QObject *parent = 0);
+	explicit RSACipher(QString inputFileName, QString outputFileName, word key, word r, QObject *parent = 0);
 
 private:
-	byte q, p;
-	word secretKey;
+	word key, r;
 	QString inputFileName, outputFileName;
 
 signals:

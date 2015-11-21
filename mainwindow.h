@@ -52,6 +52,7 @@ private:
 	QString fileAsWords(QString fileName);
 	QString getInputFileName();
 	QString getOutputFileName();
+	void displayError(ErrorType errorType);
 };
 
 #endif // MAINWINDOW_H
