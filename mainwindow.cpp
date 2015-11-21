@@ -7,12 +7,25 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 
+	setInputValidators();
+
 	enableCipherMode(true);
 }
 
 MainWindow::~MainWindow()
 {
 	delete ui;
+}
+
+void MainWindow::setInputValidators(){
+	QIntValidator *inputValidator = new QIntValidator(1, 65535, this);
+
+	ui->edtP->setValidator(inputValidator);
+	ui->edtQ->setValidator(inputValidator);
+	ui->edtRBreak->setValidator(inputValidator);
+	ui->edtRDecipher->setValidator(inputValidator);
+	ui->edtSecretKeyCipher->setValidator(inputValidator);
+	ui->edtSecretKeyDecipher->setValidator(inputValidator);
 }
 
 void MainWindow::enableCipherMode(bool enabled)
@@ -79,11 +92,11 @@ QString MainWindow::fileAsWords(QString fileName){
 	QFile f(fileName);
 	f.open(QIODevice::ReadOnly);
 	QString result;
-	char block[2];
+	word block;
 	for (qint64 i = 0; i < f.size(); i += 2){
-		f.read(block + 1, 1);
-		f.read(block, 1);
-		result.append(QString::number(*(word *)(block)) + " ");
+		f.read(((char *)&block) + 1, 1);
+		f.read((char *)&block, 1);
+		result.append(QString::number(block) + " ");
 	}
 	f.close();
 
@@ -128,56 +141,107 @@ void MainWindow::displayError(ErrorType errorType){
 
 }
 
-void MainWindow::cipherMode(){
-	word q = ui->edtQ->text().toUInt();
-	word p = ui->edtP->text().toUInt();
-	uint32 r = q * p;
-	word secretKey = ui->edtSecretKeyCipher->text().toUInt();
+void MainWindow::decipherMode(){
+	word secretKey = ui->edtSecretKeyDecipher->text().toUInt();
+	word r = ui->edtRDecipher->text().toUInt();
 
-	if (r > 65535){
-		displayError(E_TOO_BIG_P_Q);
-		return;
-	}
-
-	word eulerValue = (q - 1)*(p - 1);
-
-	if (gcd(eulerValue, secretKey) != 1){
-		displayError(E_INVALID_KEY);
-	}
-
-	if (!isPrime(p)){
-		displayError(E_NOT_PRIME_P);
-		return;
-	}
-	if (!isPrime(q)){
-		displayError(E_NOT_PRIME_Q);
-		return;
-	}
+	QString inputFileName = getInputFileName(), outputFileName = getOutputFileName();
 
 	ui->txtLog->clear();
-	QString inputFileName = getInputFileName();
+
 	QFile f(inputFileName);
-	ui->txtLog->appendPlainText("Размер входного файла: " + QString::number(f.size()) + " байт");
-	ui->txtLog->appendPlainText("Входной файл: ");
+	ui->txtLog->appendPlainText("\nРазмер входного файла: " + QString::number(f.size()) + " байт");
 
-	ui->txtLog->appendPlainText(fileAsBytes(getInputFileName()));
+	ui->txtLog->appendPlainText("\nВходной файл: ");
 
-	word openKey = getMultiplicativeInverse(secretKey, eulerValue);
+	ui->txtLog->appendPlainText(fileAsWords(inputFileName));
 
 	MainWindow::setEnabled(false);
 
-	RSACipher *rsaCipher = new RSACipher(getInputFileName(), getOutputFileName(), openKey, r);
+	RSAWorker *rsaCipher = new RSAWorker(inputFileName, outputFileName, secretKey, r, MODE_DECIPHER);
 	QThread *cipheringThread = new QThread();
 
 	connect(this, SIGNAL(destroyed()), rsaCipher, SLOT(deleteLater()));
 	connect(rsaCipher, SIGNAL(destroyed()), cipheringThread, SLOT(quit()));
 	connect(cipheringThread, SIGNAL(finished()), cipheringThread, SLOT(deleteLater()));
 	rsaCipher->moveToThread(cipheringThread);
-	connect(this, SIGNAL(doWork()), rsaCipher, SLOT(cipher()));
-	connect(rsaCipher, SIGNAL(done()), this, SLOT(cipheringDone()));
+	connect(this, SIGNAL(doWork()), rsaCipher, SLOT(startWork()));
+	connect(rsaCipher, SIGNAL(done()), this, SLOT(decipheringDone()));
 	connect(rsaCipher, SIGNAL(progress(int)), ui->progressBar, SLOT(setValue(int)));
 
 	cipheringThread->start();
+	emit doWork();
+
+
+}
+
+void MainWindow::breakMode(){
+
+}
+
+void MainWindow::cipherMode(){
+	word q = ui->edtQ->text().toUInt();
+	word p = ui->edtP->text().toUInt();
+	uint32 r = q * p;
+	word secretKey = ui->edtSecretKeyCipher->text().toUInt();
+
+	bool error = false;
+
+	if (r > 65535){
+		displayError(E_TOO_BIG_P_Q);
+		error = true;
+	}
+
+	word eulerValue = (q - 1)*(p - 1);
+
+	if (gcd(eulerValue, secretKey) != 1){
+		displayError(E_INVALID_KEY);
+		error = true;
+	}
+
+	if (!isPrime(p)){
+		displayError(E_NOT_PRIME_P);
+		error = true;
+	}
+	if (!isPrime(q)){
+		displayError(E_NOT_PRIME_Q);
+		error = true;
+	}
+
+	if (error){
+		return;
+	}
+
+	word openKey = getMultiplicativeInverse(secretKey, eulerValue);
+
+	QString inputFileName = getInputFileName(), outputFileName = getOutputFileName();
+
+
+	ui->txtLog->clear();
+
+	ui->txtLog->appendPlainText("Открытый ключ: " + QString::number(openKey));
+
+	QFile f(inputFileName);
+	ui->txtLog->appendPlainText("\nРазмер входного файла: " + QString::number(f.size()) + " байт");
+
+	ui->txtLog->appendPlainText("\nВходной файл: ");
+
+	ui->txtLog->appendPlainText(fileAsBytes(inputFileName));
+
+	MainWindow::setEnabled(false);
+
+	RSAWorker *rsaCipher = new RSAWorker(inputFileName, outputFileName, openKey, r, MODE_CIPHER);
+	QThread *decipheringThread = new QThread();
+
+	connect(this, SIGNAL(destroyed()), rsaCipher, SLOT(deleteLater()));
+	connect(rsaCipher, SIGNAL(destroyed()), decipheringThread, SLOT(quit()));
+	connect(decipheringThread, SIGNAL(finished()), decipheringThread, SLOT(deleteLater()));
+	rsaCipher->moveToThread(decipheringThread);
+	connect(this, SIGNAL(doWork()), rsaCipher, SLOT(startWork()));
+	connect(rsaCipher, SIGNAL(done()), this, SLOT(decipheringDone()));
+	connect(rsaCipher, SIGNAL(progress(int)), ui->progressBar, SLOT(setValue(int)));
+
+	decipheringThread->start();
 	emit doWork();
 }
 
@@ -185,6 +249,16 @@ void MainWindow::on_btnProcess_clicked()
 {
 	if (ui->rbtnCipher->isChecked()){
 		cipherMode();
+		return;
+	}
+
+	if (ui->rbtnDecipher->isChecked()){
+		decipherMode();
+		return;
+	}
+
+	if (ui->rbtnBreak->isChecked()){
+		breakMode();
 		return;
 	}
 }
@@ -199,12 +273,29 @@ QString MainWindow::getOutputFileName(){
 
 void MainWindow::cipheringDone()
 {
-	RSACipher *rsaCipher = static_cast<RSACipher *>(sender());
-	delete rsaCipher;
+	RSAWorker *rsaWorker = static_cast<RSAWorker *>(sender());
+	delete rsaWorker;
+
 	ui->txtLog->appendPlainText("\nВыходной файл: ");
 	ui->txtLog->appendPlainText(fileAsWords(getOutputFileName()));
+
 	MainWindow::setEnabled(true);
+
 	QMessageBox::information(this, "Информация", "Процесс завершен!");
 	ui->progressBar->setValue(0);
 
+}
+
+void MainWindow::decipheringDone()
+{
+	RSAWorker *rsaWorker = static_cast<RSAWorker *>(sender());
+	delete rsaWorker;
+
+	ui->txtLog->appendPlainText("\nВыходной файл: ");
+	ui->txtLog->appendPlainText(fileAsBytes(getOutputFileName()));
+
+	MainWindow::setEnabled(true);
+
+	QMessageBox::information(this, "Информация", "Процесс завершен!");
+	ui->progressBar->setValue(0);
 }

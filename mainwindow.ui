@@ -126,10 +126,24 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_10">
        <item row="3" column="1">
-        <widget class="QLineEdit" name="edtSecretKeyCipher"/>
+        <widget class="QLineEdit" name="edtSecretKeyCipher">
+         <property name="inputMethodHints">
+          <set>Qt::ImhNone</set>
+         </property>
+         <property name="maxLength">
+          <number>5</number>
+         </property>
+        </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QLineEdit" name="edtQ"/>
+        <widget class="QLineEdit" name="edtQ">
+         <property name="inputMethodHints">
+          <set>Qt::ImhNone</set>
+         </property>
+         <property name="maxLength">
+          <number>5</number>
+         </property>
+        </widget>
        </item>
        <item row="1" column="0" alignment="Qt::AlignRight">
         <widget class="QLabel" name="lblP">
@@ -146,7 +160,14 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QLineEdit" name="edtP"/>
+        <widget class="QLineEdit" name="edtP">
+         <property name="inputMethodHints">
+          <set>Qt::ImhNone</set>
+         </property>
+         <property name="maxLength">
+          <number>5</number>
+         </property>
+        </widget>
        </item>
        <item row="3" column="0" alignment="Qt::AlignRight">
         <widget class="QLabel" name="lblSecretKeyCipher">
@@ -174,6 +195,9 @@
            <width>286</width>
            <height>0</height>
           </size>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -204,10 +228,24 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QLineEdit" name="edtRDecipher"/>
+        <widget class="QLineEdit" name="edtRDecipher">
+         <property name="inputMethodHints">
+          <set>Qt::ImhNone</set>
+         </property>
+         <property name="maxLength">
+          <number>5</number>
+         </property>
+        </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QLineEdit" name="edtSecretKeyDecipher"/>
+        <widget class="QLineEdit" name="edtSecretKeyDecipher">
+         <property name="inputMethodHints">
+          <set>Qt::ImhNone</set>
+         </property>
+         <property name="maxLength">
+          <number>5</number>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -226,7 +264,14 @@
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="QLineEdit" name="edtOpenKey"/>
+        <widget class="QLineEdit" name="edtOpenKey">
+         <property name="inputMethodHints">
+          <set>Qt::ImhNone</set>
+         </property>
+         <property name="maxLength">
+          <number>5</number>
+         </property>
+        </widget>
        </item>
        <item row="2" column="1" alignment="Qt::AlignRight">
         <widget class="QLabel" name="lblOpenKey">
@@ -239,7 +284,14 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QLineEdit" name="edtRBreak"/>
+        <widget class="QLineEdit" name="edtRBreak">
+         <property name="inputMethodHints">
+          <set>Qt::ImhNone</set>
+         </property>
+         <property name="maxLength">
+          <number>5</number>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

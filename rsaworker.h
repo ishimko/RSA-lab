@@ -9,22 +9,23 @@
 
 
 
-class RSACipher : public QObject
+class RSAWorker : public QObject
 {
 	Q_OBJECT
 public:
-	explicit RSACipher(QString inputFileName, QString outputFileName, word key, word r, QObject *parent = 0);
+	explicit RSAWorker(QString inputFileName, QString outputFileName, word key, word r, WorkerMode workerMode, QObject *parent = 0);
 
 private:
 	word key, r;
 	QString inputFileName, outputFileName;
+	WorkerMode workerMode;
 
 signals:
 	void progress(int progressValue);
 	void done();
 
 public slots:
-	void cipher();
+	void startWork();
 
 };
 

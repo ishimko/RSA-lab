@@ -15,11 +15,11 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     rsaroutines.cpp \
-    rsacipher.cpp
+    rsaworker.cpp
 
 HEADERS  += mainwindow.h \
     types.h \
     rsaroutines.h \
-    rsacipher.h
+    rsaworker.h
 
 FORMS    += mainwindow.ui

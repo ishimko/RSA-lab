@@ -61,3 +61,33 @@ word gcd(word a, word b)
 
 	return gcd(b % a, a);
 }
+
+void writeDecipheredByte(word out, QFile *outputFile)
+{
+	char outByte = out & 255;
+	outputFile->write(&outByte, 1);
+}
+
+void writeCipheredWord(word out, QFile *outputFile)
+{
+	char firstByte = out & 255;
+	char secondByte = out >> 8;
+
+	outputFile->write(&secondByte, 1);
+	outputFile->write(&firstByte, 1);
+}
+
+word readCipheredWord(QFile *inputFile)
+{
+	word result;
+	inputFile->read(((char *)&result) + 1, 1);
+	inputFile->read((char *)&result, 1);
+	return result;
+}
+
+word readPlaintextByte(QFile *inputFile)
+{
+	char result;
+	inputFile->read(&result, 1);
+	return result & 255;
+}

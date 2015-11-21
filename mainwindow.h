@@ -8,7 +8,7 @@
 #include <QFile>
 
 #include "types.h"
-#include "rsacipher.h"
+#include "rsaworker.h"
 
 namespace Ui {
 class MainWindow;
@@ -37,6 +37,8 @@ private slots:
 
 	void cipheringDone();
 
+	void decipheringDone();
+
 signals:
 	void doWork();
 	void pause();
@@ -55,6 +57,9 @@ private:
 	void displayError(ErrorType errorType);
 	void cipherMode();
 	QString fileAsBytes(QString fileName);
+	void setInputValidators();
+	void decipherMode();
+	void breakMode();
 };
 
 #endif // MAINWINDOW_H
