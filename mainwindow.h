@@ -39,6 +39,8 @@ private slots:
 
 	void workDone(QString srcFile, QString resultFile);
 
+	void on_toolButton_clicked();
+
 signals:
 	void doWork();
 

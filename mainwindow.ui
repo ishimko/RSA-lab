@@ -69,56 +69,6 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0" colspan="2">
-     <widget class="QGroupBox" name="grpFiles">
-      <property name="title">
-       <string/>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_7">
-       <item row="2" column="0">
-        <widget class="QLabel" name="lblOutputFile">
-         <property name="text">
-          <string>Выходной файл</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="edtInputFile">
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>0</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="edtOutputFile"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lblInputFile">
-         <property name="text">
-          <string>Входной файл</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QToolButton" name="btnChooseInputFile">
-         <property name="text">
-          <string>...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QToolButton" name="btnChooseOutputFile">
-         <property name="text">
-          <string>...</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
     <item row="3" column="0" colspan="2">
      <widget class="QGroupBox" name="grpCipher">
       <property name="enabled">
@@ -293,6 +243,63 @@
          </property>
          <property name="maxLength">
           <number>5</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="2">
+     <widget class="QGroupBox" name="grpFiles">
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="edtInputFile">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="edtOutputFile"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lblInputFile">
+         <property name="text">
+          <string>Входной файл</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QToolButton" name="btnChooseInputFile">
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QToolButton" name="btnChooseOutputFile">
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="lblOutputFile">
+         <property name="text">
+          <string>Выходной файл</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3" rowspan="2">
+        <widget class="QToolButton" name="toolButton">
+         <property name="text">
+          <string>↑↓</string>
          </property>
         </widget>
        </item>

@@ -121,7 +121,7 @@ void MainWindow::displayError(ErrorType errorType){
 			errorMessageBox.setText("q не является простым числом!");
 			break;
 		case E_INVALID_KEY:
-			errorMessageBox.setText("Ключ должен быть взаимно простым со значением функции Эйлера от r!");
+			errorMessageBox.setText("Ключ не является взаимно простым со значением функции Эйлера от r!");
 			break;
 		case E_INVALID_INPUT_FILE:
 			errorMessageBox.setText("Ошибка чтения входного файла!");
@@ -130,7 +130,7 @@ void MainWindow::displayError(ErrorType errorType){
 			errorMessageBox.setText("Ошибка записи в выходной файл!");
 			break;
 		case E_TOO_SMALL_P_Q:
-			errorMessageBox.setText("Произведение p и q должно быть больше 255!");
+			errorMessageBox.setText("Произведение p и q меньше 256!");
 			break;
 		default:
 			errorMessageBox.setText("Неизвестная ошибка!");
@@ -161,7 +161,7 @@ void MainWindow::breakMode(QString inputFileName, QString outputFileName){
 	word secretKey = getMultiplicativeInverse(openKey, eulerValue);
 
 	ui->txtLog->appendPlainText("\nНайденные сомножители: " + QString::number(p) + ", " + QString::number(q));
-	ui->txtLog->appendPlainText("\nСекретный ключ: (" + QString::number(secretKey) + ", " + QString::number(r) + ")");
+	ui->txtLog->appendPlainText("\nСекретный ключ: d = " + QString::number(secretKey));
 
 	MainWindow::setEnabled(false);
 
@@ -269,7 +269,7 @@ void MainWindow::cipherMode(QString inputFileName, QString outputFileName){
 
 	word openKey = getMultiplicativeInverse(secretKey, eulerValue);
 
-	ui->txtLog->appendPlainText("\nОткрытый ключ: (" + QString::number(openKey) + ", " + QString::number(r) + ")");
+	ui->txtLog->appendPlainText("\nОткрытый ключ: e = " + QString::number(openKey) + ", r = " + QString::number(r));
 
 	MainWindow::setEnabled(false);
 
@@ -360,4 +360,11 @@ void MainWindow::workDone(QString srcFile, QString resultFile)
 	QMessageBox::information(this, "Информация", "Процесс завершен!");
 	ui->progressBar->setValue(0);
 
+}
+
+void MainWindow::on_toolButton_clicked()
+{
+	QString tmp = ui->edtInputFile->text();
+	ui->edtInputFile->setText(ui->edtOutputFile->text());
+	ui->edtOutputFile->setText(tmp);
 }
