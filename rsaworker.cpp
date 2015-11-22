@@ -26,9 +26,14 @@ void RSAWorker::startWork()
 	ResultWriter writeResult = (workerMode == MODE_CIPHER)?&writeCipheredWord:&writeDecipheredByte;
 	InputReader readBlock = (workerMode == MODE_CIPHER)?&readPlaintextByte:&readCipheredWord;
 
+	QString srcFile, resultFile;
+
 	for (quint64 i = 0; i < fileSize; i++){
 		in = readBlock(&inputFile);
+		srcFile.append(QString::number(in) + " ");
+
 		out = fastModularExponentiation(in, key, r);
+		resultFile.append(QString::number(out) + " ");
 
 		writeResult(out, &outputFile);
 
@@ -41,7 +46,7 @@ void RSAWorker::startWork()
 	outputFile.close();
 
 	emit progress(100);
-	emit done();
+	emit done(srcFile, resultFile);
 }
 
 

@@ -22,7 +22,7 @@ private:
 
 signals:
 	void progress(int progressValue);
-	void done();
+	void done(QString srcFile, QString resultFile);
 
 public slots:
 	void startWork();

@@ -170,14 +170,10 @@ void MainWindow::decipherMode(QString inputFileName, QString outputFileName){
 	QFile f(inputFileName);
 	ui->txtLog->appendPlainText("Размер входного файла: " + QString::number(f.size()) + " байт");
 
-	ui->txtLog->appendPlainText("\nВходной файл: ");
-
-	ui->txtLog->appendPlainText(fileAsWords(inputFileName));
-
 	MainWindow::setEnabled(false);
 
 	RSAWorker *rsaWorker = new RSAWorker(inputFileName, outputFileName, secretKey, r, MODE_DECIPHER);
-	QThread *workerThread = getRSAWorkerThread(rsaWorker, MODE_DECIPHER);
+	QThread *workerThread = getRSAWorkerThread(rsaWorker);
 
 	workerThread->start();
 	emit doWork();
@@ -197,20 +193,16 @@ void MainWindow::breakMode(QString inputFileName, QString outputFileName){
 	QFile f(inputFileName);
 	ui->txtLog->appendPlainText("\nРазмер входного файла: " + QString::number(f.size()) + " байт");
 
-	ui->txtLog->appendPlainText("\nВходной файл: ");
-
-	ui->txtLog->appendPlainText(fileAsWords(inputFileName));
-
 	MainWindow::setEnabled(false);
 
 	RSAWorker *rsaWorker = new RSAWorker(inputFileName, outputFileName, secretKey, r, MODE_DECIPHER);
-	QThread *workerThread = getRSAWorkerThread(rsaWorker, MODE_DECIPHER);
+	QThread *workerThread = getRSAWorkerThread(rsaWorker);
 
 	workerThread->start();
 	emit doWork();
 }
 
-QThread *MainWindow::getRSAWorkerThread(RSAWorker *worker, WorkerMode workerMode)
+QThread *MainWindow::getRSAWorkerThread(RSAWorker *worker)
 {
 	QThread *workerThread= new QThread();
 
@@ -220,11 +212,8 @@ QThread *MainWindow::getRSAWorkerThread(RSAWorker *worker, WorkerMode workerMode
 	worker->moveToThread(workerThread);
 	connect(this, SIGNAL(doWork()), worker, SLOT(startWork()));
 
-	if (workerMode == MODE_CIPHER){
-		connect(worker, SIGNAL(done()), this, SLOT(cipheringDone()));
-	} else {
-		connect(worker, SIGNAL(done()), this, SLOT(decipheringDone()));
-	}
+
+	connect(worker, SIGNAL(done(QString, QString)), this, SLOT(workDone(QString,QString)));
 
 	connect(worker, SIGNAL(progress(int)), ui->progressBar, SLOT(setValue(int)));
 
@@ -311,14 +300,10 @@ void MainWindow::cipherMode(QString inputFileName, QString outputFileName){
 	QFile f(inputFileName);
 	ui->txtLog->appendPlainText("\nРазмер входного файла: " + QString::number(f.size()) + " байт");
 
-	ui->txtLog->appendPlainText("\nВходной файл: ");
-
-	ui->txtLog->appendPlainText(fileAsBytes(inputFileName));
-
 	MainWindow::setEnabled(false);
 
 	RSAWorker *rsaWorker = new RSAWorker(inputFileName, outputFileName, openKey, r, MODE_CIPHER);
-	QThread *workerThread = getRSAWorkerThread(rsaWorker, MODE_CIPHER);
+	QThread *workerThread = getRSAWorkerThread(rsaWorker);
 
 	workerThread->start();
 	emit doWork();
@@ -366,35 +351,6 @@ QString MainWindow::getOutputFileName(){
 	return ui->edtOutputFile->text();
 }
 
-void MainWindow::cipheringDone()
-{
-	RSAWorker *rsaWorker = static_cast<RSAWorker *>(sender());
-	delete rsaWorker;
-
-	ui->txtLog->appendPlainText("\nВыходной файл: ");
-	ui->txtLog->appendPlainText(fileAsWords(getOutputFileName()));
-
-	MainWindow::setEnabled(true);
-
-	QMessageBox::information(this, "Информация", "Процесс завершен!");
-	ui->progressBar->setValue(0);
-
-}
-
-void MainWindow::decipheringDone()
-{
-	RSAWorker *rsaWorker = static_cast<RSAWorker *>(sender());
-	delete rsaWorker;
-
-	ui->txtLog->appendPlainText("\nВыходной файл: ");
-	ui->txtLog->appendPlainText(fileAsBytes(getOutputFileName()));
-
-	MainWindow::setEnabled(true);
-
-	QMessageBox::information(this, "Информация", "Процесс завершен!");
-	ui->progressBar->setValue(0);
-}
-
 void MainWindow::checkFields()
 {
 	bool validFields = validFilesFields();
@@ -412,4 +368,22 @@ void MainWindow::checkFields()
 	}
 
 	ui->btnProcess->setEnabled(validFields);
+}
+
+void MainWindow::workDone(QString srcFile, QString resultFile)
+{
+	RSAWorker *rsaWorker = static_cast<RSAWorker *>(sender());
+	delete rsaWorker;
+
+	ui->txtLog->appendPlainText("\nВходной файл: ");
+	ui->txtLog->appendPlainText(srcFile);
+
+	ui->txtLog->appendPlainText("\nВыходной файл: ");
+	ui->txtLog->appendPlainText(resultFile);
+
+	MainWindow::setEnabled(true);
+
+	QMessageBox::information(this, "Информация", "Процесс завершен!");
+	ui->progressBar->setValue(0);
+
 }

@@ -35,11 +35,9 @@ private slots:
 
 	void on_btnProcess_clicked();
 
-	void cipheringDone();
-
-	void decipheringDone();
-
 	void checkFields();
+
+	void workDone(QString srcFile, QString resultFile);
 
 signals:
 	void doWork();
@@ -50,9 +48,6 @@ private:
 	void enableCipherMode(bool enabled);
 	void enableDecipherMode(bool enabled);
 	void enableBreakMode(bool enabled);
-
-	QString fileAsWords(QString fileName);
-	QString fileAsBytes(QString fileName);
 
 	QString getInputFileName();
 	QString getOutputFileName();
@@ -65,7 +60,7 @@ private:
 	void decipherMode(QString inputFileName, QString outputFileName);
 	void breakMode(QString inputFileName, QString outputFileName);
 
-	QThread *getRSAWorkerThread(RSAWorker *worker, WorkerMode workerMode);
+	QThread *getRSAWorkerThread(RSAWorker *worker);
 
 	bool validCipherModeFields();
 	bool validDecipherModeFields();
