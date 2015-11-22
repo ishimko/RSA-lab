@@ -136,11 +136,6 @@ void MainWindow::decipherMode(QString inputFileName, QString outputFileName){
 	word secretKey = ui->edtSecretKeyDecipher->text().toUInt();
 	word r = ui->edtRDecipher->text().toUInt();
 
-	ui->txtLog->clear();
-
-	QFile f(inputFileName);
-	ui->txtLog->appendPlainText("Размер входного файла: " + QString::number(f.size()) + " байт");
-
 	MainWindow::setEnabled(false);
 
 	RSAWorker *rsaWorker = new RSAWorker(inputFileName, outputFileName, secretKey, r, MODE_DECIPHER);
@@ -158,11 +153,8 @@ void MainWindow::breakMode(QString inputFileName, QString outputFileName){
 	word eulerValue = (p - 1)*(q - 1);
 	word secretKey = getMultiplicativeInverse(openKey, eulerValue);
 
-	ui->txtLog->clear();
-	ui->txtLog->appendPlainText("Найденные сомножители: " + QString::number(p) + ", " + QString::number(q));
+	ui->txtLog->appendPlainText("\nНайденные сомножители: " + QString::number(p) + ", " + QString::number(q));
 	ui->txtLog->appendPlainText("\nСекретный ключ: (" + QString::number(secretKey) + ", " + QString::number(r) + ")");
-	QFile f(inputFileName);
-	ui->txtLog->appendPlainText("\nРазмер входного файла: " + QString::number(f.size()) + " байт");
 
 	MainWindow::setEnabled(false);
 
@@ -264,12 +256,7 @@ void MainWindow::cipherMode(QString inputFileName, QString outputFileName){
 
 	word openKey = getMultiplicativeInverse(secretKey, eulerValue);
 
-	ui->txtLog->clear();
-
-	ui->txtLog->appendPlainText("Открытый ключ: (" + QString::number(openKey) + ", " + QString::number(r) + ")");
-
-	QFile f(inputFileName);
-	ui->txtLog->appendPlainText("\nРазмер входного файла: " + QString::number(f.size()) + " байт");
+	ui->txtLog->appendPlainText("\nОткрытый ключ: (" + QString::number(openKey) + ", " + QString::number(r) + ")");
 
 	MainWindow::setEnabled(false);
 
@@ -297,6 +284,9 @@ void MainWindow::on_btnProcess_clicked()
 
 	input.close();
 	output.close();
+
+	ui->txtLog->clear();
+	ui->txtLog->appendPlainText("Размер входного файла: " + QString::number(input.size()) + " байт");
 
 	if (ui->rbtnCipher->isChecked()){
 		cipherMode(inputFileName, outputFileName);
