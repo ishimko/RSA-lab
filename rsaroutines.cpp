@@ -6,11 +6,11 @@ word fastModularExponentiation(word number, word power, word modulo)
 
 	while (power){
 		while (!(power % 2)){
-			power = power / 2;
-			number = (number * number) % modulo;
+			power /= 2;
+			number = ((uint32)number * number) % modulo;
 		}
 		power--;
-		result = (result * number) % modulo;
+		result = ((uint32)result * number) % modulo;
 	}
 	return result;
 }
@@ -38,7 +38,7 @@ word euclidExtended(word a, int b, int *x, int *y){
 	return d;
 }
 
-bool isPrime(int number)
+bool isPrime(word number)
 {
 	bool result = true;
 
@@ -50,7 +50,7 @@ bool isPrime(int number)
 		return false;
 
 	for (int i = 3; i <= (int)sqrt(number) && result; i += 2){
-		result = (number % 2);
+		result = (number % i);
 	}
 
 	return result;
