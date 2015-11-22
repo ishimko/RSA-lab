@@ -39,10 +39,10 @@ private slots:
 
 	void decipheringDone();
 
+	void checkFields();
+
 signals:
 	void doWork();
-	void pause();
-	void start();
 
 private:
 	Ui::MainWindow *ui;
@@ -66,6 +66,11 @@ private:
 	void breakMode(QString inputFileName, QString outputFileName);
 
 	QThread *getRSAWorkerThread(RSAWorker *worker, WorkerMode workerMode);
+
+	bool validCipherModeFields();
+	bool validDecipherModeFields();
+	bool validBreakModeFields();
+	bool validFilesFields();
 };
 
 #endif // MAINWINDOW_H

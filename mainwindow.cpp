@@ -9,6 +9,20 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	setInputValidators();
 
+	connect(ui->edtInputFile, SIGNAL(textEdited(QString)), this, SLOT(checkFields()));
+	connect(ui->edtOutputFile, SIGNAL(textEdited(QString)), this, SLOT(checkFields()));
+	connect(ui->edtOpenKey, SIGNAL(textEdited(QString)), this, SLOT(checkFields()));
+	connect(ui->edtP, SIGNAL(textEdited(QString)), this, SLOT(checkFields()));
+	connect(ui->edtQ, SIGNAL(textEdited(QString)), this, SLOT(checkFields()));
+	connect(ui->edtRBreak, SIGNAL(textEdited(QString)), this, SLOT(checkFields()));
+	connect(ui->edtRDecipher, SIGNAL(textEdited(QString)), this, SLOT(checkFields()));
+	connect(ui->edtSecretKeyCipher, SIGNAL(textEdited(QString)), this, SLOT(checkFields()));
+	connect(ui->edtSecretKeyDecipher, SIGNAL(textEdited(QString)), this, SLOT(checkFields()));
+
+	connect(ui->rbtnBreak, SIGNAL(clicked()), this, SLOT(checkFields()));
+	connect(ui->rbtnCipher, SIGNAL(clicked()), this, SLOT(checkFields()));
+	connect(ui->rbtnDecipher, SIGNAL(clicked()), this, SLOT(checkFields()));
+
 	enableCipherMode(true);
 }
 
@@ -217,6 +231,44 @@ QThread *MainWindow::getRSAWorkerThread(RSAWorker *worker, WorkerMode workerMode
 	return workerThread;
 }
 
+bool MainWindow::validCipherModeFields()
+{
+	bool zero = ui->edtP->text().toInt() == 0 ||
+				ui->edtQ->text().toInt() == 0 ||
+				ui->edtSecretKeyCipher->text().toInt() == 0;
+
+	return	ui->edtP->text() != "" &&
+			ui->edtQ->text() != "" &&
+			ui->edtSecretKeyCipher->text() != "" &&
+			!zero;
+}
+
+bool MainWindow::validDecipherModeFields()
+{
+	bool zero = ui->edtRDecipher->text().toInt() == 0 ||
+				ui->edtSecretKeyDecipher->text().toInt() == 0;
+
+	return	ui->edtRDecipher->text() != "" &&
+			ui->edtSecretKeyDecipher->text() != "" &&
+			!zero;
+}
+
+bool MainWindow::validBreakModeFields()
+{
+	bool zero = ui->edtRBreak->text().toInt() == 0 ||
+				ui->edtOpenKey->text().toInt() == 0;
+
+	return	ui->edtRBreak->text() != "" &&
+			ui->edtOpenKey->text() != "" &&
+			!zero;
+}
+
+bool MainWindow::validFilesFields()
+{
+	return	ui->edtInputFile->text() != "" &&
+			ui->edtOutputFile->text() != "";
+}
+
 void MainWindow::cipherMode(QString inputFileName, QString outputFileName){
 	word q = ui->edtQ->text().toUInt();
 	word p = ui->edtP->text().toUInt();
@@ -341,4 +393,23 @@ void MainWindow::decipheringDone()
 
 	QMessageBox::information(this, "Информация", "Процесс завершен!");
 	ui->progressBar->setValue(0);
+}
+
+void MainWindow::checkFields()
+{
+	bool validFields = validFilesFields();
+
+	if (ui->rbtnBreak->isChecked()){
+		validFields = validFields &&  validBreakModeFields();
+	}
+
+	if (ui->rbtnCipher->isChecked()){
+		validFields = validFields && validCipherModeFields();
+
+	}
+	if (ui->rbtnDecipher->isChecked()){
+		validFields = validFields && validDecipherModeFields();
+	}
+
+	ui->btnProcess->setEnabled(validFields);
 }

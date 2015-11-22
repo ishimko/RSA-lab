@@ -54,6 +54,9 @@
     </item>
     <item row="10" column="0">
      <widget class="QPushButton" name="btnProcess">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="text">
        <string>Обработать</string>
       </property>
