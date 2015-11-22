@@ -105,10 +105,10 @@ void MainWindow::on_btnChooseOutputFile_clicked()
 void MainWindow::displayError(ErrorType errorType){
 	switch(errorType){
 		case E_TOO_BIG_KEY:
-			QMessageBox::critical(this, "Ошибка", "Значение ключа не является двухбайтовым!");
+			QMessageBox::critical(this, "Ошибка", "Значение ключа больше двух байт!");
 			break;
 		case E_TOO_BIG_P_Q:
-			QMessageBox::critical(this, "Ошибка", "Произведение p и q не является двухбайтовым!");
+			QMessageBox::critical(this, "Ошибка", "Произведение p и q больше двух байт!");
 			break;
 		case E_NOT_PRIME_P:
 			QMessageBox::critical(this, "Ошибка", "p не является простым числом!");
@@ -124,6 +124,9 @@ void MainWindow::displayError(ErrorType errorType){
 			break;
 		case E_INVALID_OUTPUT_FILE:
 			QMessageBox::critical(this, "Ошибка", "Ошибка записи в выходной файл!");
+			break;
+		case E_TOO_SMALL_P_Q:
+			QMessageBox::critical(this, "Ошибка", "Произведение p и q должно быть больше 255!");
 			break;
 		default:
 			QMessageBox::critical(this, "Ошибка", "Неизвестная ошибка!");
@@ -232,6 +235,11 @@ void MainWindow::cipherMode(QString inputFileName, QString outputFileName){
 	if (r > 65535){
 		displayError(E_TOO_BIG_P_Q);
 		error = true;
+	} else {
+		if (r < 256){
+			displayError(E_TOO_SMALL_P_Q);
+			error = true;
+		}
 	}
 
 	word eulerValue = (q - 1)*(p - 1);
@@ -251,6 +259,7 @@ void MainWindow::cipherMode(QString inputFileName, QString outputFileName){
 	}
 
 	if (error){
+		ui->txtLog->clear();
 		return;
 	}
 
