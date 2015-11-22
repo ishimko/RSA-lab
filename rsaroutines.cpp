@@ -2,7 +2,7 @@
 
 word fastModularExponentiation(word number, word power, word modulo)
 {
-	uint32 result = 1;
+	word result = 1;
 
 	while (power){
 		while (!(power % 2)){
