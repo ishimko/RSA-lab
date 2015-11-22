@@ -303,6 +303,24 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>edtInputFile</tabstop>
+  <tabstop>edtOutputFile</tabstop>
+  <tabstop>btnChooseInputFile</tabstop>
+  <tabstop>btnChooseOutputFile</tabstop>
+  <tabstop>edtP</tabstop>
+  <tabstop>edtQ</tabstop>
+  <tabstop>edtSecretKeyCipher</tabstop>
+  <tabstop>edtRDecipher</tabstop>
+  <tabstop>edtSecretKeyDecipher</tabstop>
+  <tabstop>edtRBreak</tabstop>
+  <tabstop>edtOpenKey</tabstop>
+  <tabstop>btnProcess</tabstop>
+  <tabstop>rbtnCipher</tabstop>
+  <tabstop>rbtnDecipher</tabstop>
+  <tabstop>rbtnBreak</tabstop>
+  <tabstop>txtLog</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
