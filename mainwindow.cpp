@@ -103,36 +103,40 @@ void MainWindow::on_btnChooseOutputFile_clicked()
 }
 
 void MainWindow::displayError(ErrorType errorType){
+	QMessageBox errorMessageBox;
+	errorMessageBox.setWindowTitle("Ошибка");
+	errorMessageBox.setIcon(QMessageBox::Critical);
+
 	switch(errorType){
 		case E_TOO_BIG_KEY:
-			QMessageBox::critical(this, "Ошибка", "Значение ключа больше двух байт!");
+			errorMessageBox.setText("Значение ключа больше двух байт!");
 			break;
 		case E_TOO_BIG_P_Q:
-			QMessageBox::critical(this, "Ошибка", "Произведение p и q больше двух байт!");
+			errorMessageBox.setText("Произведение p и q больше двух байт!");
 			break;
 		case E_NOT_PRIME_P:
-			QMessageBox::critical(this, "Ошибка", "p не является простым числом!");
+			errorMessageBox.setText("p не является простым числом!");
 			break;
 		case E_NOT_PRIME_Q:
-			QMessageBox::critical(this, "Ошибка", "q не является простым числом!");
+			errorMessageBox.setText("q не является простым числом!");
 			break;
 		case E_INVALID_KEY:
-			QMessageBox::critical(this, "Ошибка", "Ключ должен быть взаимно простым со значением функции Эйлера от r!");
+			errorMessageBox.setText("Ключ должен быть взаимно простым со значением функции Эйлера от r!");
 			break;
 		case E_INVALID_INPUT_FILE:
-			QMessageBox::critical(this, "Ошибка", "Ошибка чтения входного файла!");
+			errorMessageBox.setText("Ошибка чтения входного файла!");
 			break;
 		case E_INVALID_OUTPUT_FILE:
-			QMessageBox::critical(this, "Ошибка", "Ошибка записи в выходной файл!");
+			errorMessageBox.setText("Ошибка записи в выходной файл!");
 			break;
 		case E_TOO_SMALL_P_Q:
-			QMessageBox::critical(this, "Ошибка", "Произведение p и q должно быть больше 255!");
+			errorMessageBox.setText("Произведение p и q должно быть больше 255!");
 			break;
 		default:
-			QMessageBox::critical(this, "Ошибка", "Неизвестная ошибка!");
+			errorMessageBox.setText("Неизвестная ошибка!");
 			break;
 	}
-
+	errorMessageBox.exec();
 }
 
 void MainWindow::decipherMode(QString inputFileName, QString outputFileName){
