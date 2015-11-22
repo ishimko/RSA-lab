@@ -39,7 +39,7 @@ private slots:
 
 	void workDone(QString srcFile, QString resultFile);
 
-	void on_toolButton_clicked();
+	void on_btnSwapFileNames_clicked();
 
 signals:
 	void doWork();

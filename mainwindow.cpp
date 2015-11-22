@@ -362,7 +362,7 @@ void MainWindow::workDone(QString srcFile, QString resultFile)
 
 }
 
-void MainWindow::on_toolButton_clicked()
+void MainWindow::on_btnSwapFileNames_clicked()
 {
 	QString tmp = ui->edtInputFile->text();
 	ui->edtInputFile->setText(ui->edtOutputFile->text());
