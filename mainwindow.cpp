@@ -102,35 +102,6 @@ void MainWindow::on_btnChooseOutputFile_clicked()
 	}
 }
 
-QString MainWindow::fileAsWords(QString fileName){
-	QFile f(fileName);
-	f.open(QIODevice::ReadOnly);
-	QString result;
-	word block;
-	for (qint64 i = 0; i < f.size(); i += 2){
-		f.read(((char *)&block) + 1, 1);
-		f.read((char *)&block, 1);
-		result.append(QString::number(block) + " ");
-	}
-	f.close();
-
-	return result;
-}
-
-QString MainWindow::fileAsBytes(QString fileName){
-	QFile f(fileName);
-	f.open(QIODevice::ReadOnly);
-	QString result;
-	char block;
-	for (qint64 i = 0; i < f.size(); i++){
-		f.read(&block, 1);
-		result.append(QString::number((byte)block) + " ");
-	}
-	f.close();
-
-	return result;
-}
-
 void MainWindow::displayError(ErrorType errorType){
 	switch(errorType){
 		case E_TOO_BIG_KEY:
@@ -188,7 +159,7 @@ void MainWindow::breakMode(QString inputFileName, QString outputFileName){
 	word secretKey = getMultiplicativeInverse(openKey, eulerValue);
 
 	ui->txtLog->clear();
-	ui->txtLog->appendPlainText("p = " + QString::number(p) + ", q = " + QString::number(q));
+	ui->txtLog->appendPlainText("Найденные сомножители: " + QString::number(p) + ", " + QString::number(q));
 	ui->txtLog->appendPlainText("\nСекретный ключ: (" + QString::number(secretKey) + ", " + QString::number(r) + ")");
 	QFile f(inputFileName);
 	ui->txtLog->appendPlainText("\nРазмер входного файла: " + QString::number(f.size()) + " байт");
