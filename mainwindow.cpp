@@ -9,15 +9,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	setInputValidators();
 
-	connect(ui->edtInputFile, SIGNAL(textEdited(QString)), this, SLOT(checkFields()));
-	connect(ui->edtOutputFile, SIGNAL(textEdited(QString)), this, SLOT(checkFields()));
-	connect(ui->edtOpenKey, SIGNAL(textEdited(QString)), this, SLOT(checkFields()));
-	connect(ui->edtP, SIGNAL(textEdited(QString)), this, SLOT(checkFields()));
-	connect(ui->edtQ, SIGNAL(textEdited(QString)), this, SLOT(checkFields()));
-	connect(ui->edtRBreak, SIGNAL(textEdited(QString)), this, SLOT(checkFields()));
-	connect(ui->edtRDecipher, SIGNAL(textEdited(QString)), this, SLOT(checkFields()));
-	connect(ui->edtSecretKeyCipher, SIGNAL(textEdited(QString)), this, SLOT(checkFields()));
-	connect(ui->edtSecretKeyDecipher, SIGNAL(textEdited(QString)), this, SLOT(checkFields()));
+	connect(ui->edtInputFile, SIGNAL(textChanged(QString)), this, SLOT(checkFields()));
+	connect(ui->edtOutputFile, SIGNAL(textChanged(QString)), this, SLOT(checkFields()));
+	connect(ui->edtOpenKey, SIGNAL(textChanged(QString)), this, SLOT(checkFields()));
+	connect(ui->edtP, SIGNAL(textChanged(QString)), this, SLOT(checkFields()));
+	connect(ui->edtQ, SIGNAL(textChanged(QString)), this, SLOT(checkFields()));
+	connect(ui->edtRBreak, SIGNAL(textChanged(QString)), this, SLOT(checkFields()));
+	connect(ui->edtRDecipher, SIGNAL(textChanged(QString)), this, SLOT(checkFields()));
+	connect(ui->edtSecretKeyCipher, SIGNAL(textChanged(QString)), this, SLOT(checkFields()));
+	connect(ui->edtSecretKeyDecipher, SIGNAL(textChanged(QString)), this, SLOT(checkFields()));
 
 	connect(ui->rbtnBreak, SIGNAL(clicked()), this, SLOT(checkFields()));
 	connect(ui->rbtnCipher, SIGNAL(clicked()), this, SLOT(checkFields()));
