@@ -15,7 +15,8 @@ typedef enum{
 	E_TOO_BIG_KEY,
 	E_TOO_SMALL_P_Q,
 	E_INVALID_INPUT_FILE,
-	E_INVALID_OUTPUT_FILE
+	E_INVALID_OUTPUT_FILE,
+	E_INVALID_R
 } ErrorType;
 
 typedef enum{

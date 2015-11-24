@@ -132,6 +132,9 @@ void MainWindow::displayError(ErrorType errorType){
 		case E_TOO_SMALL_P_Q:
 			errorMessageBox.setText("Произведение p и q меньше 256!");
 			break;
+		case E_INVALID_R:
+			errorMessageBox.setText("Неверный модуль! Взлом невозможен!");
+			break;
 		default:
 			errorMessageBox.setText("Неизвестная ошибка!");
 			break;
@@ -155,7 +158,19 @@ void MainWindow::decipherMode(QString inputFileName, QString outputFileName){
 void MainWindow::breakMode(QString inputFileName, QString outputFileName){
 	word openKey = ui->edtOpenKey->text().toUInt();
 	word r = ui->edtRBreak->text().toUInt();
+
+	if (r < 256){
+		displayError(E_INVALID_R);
+		return;
+	}
+
 	word q = getFirstDivider(r);
+
+	if (q == 1){
+		displayError(E_INVALID_R);
+		return;
+	}
+
 	word p = r / q;
 	word eulerValue = (p - 1)*(q - 1);
 	word secretKey = getMultiplicativeInverse(openKey, eulerValue);
